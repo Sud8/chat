@@ -14,7 +14,7 @@ var server = require('http').createServer(app),
 io = require('socket.io').listen(server);
 
 var userNames = [];
-server.listen(80);
+server.listen(3001);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,15 +28,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', function(req, res) {
-  res.sendFile(path.join(__dirname, '', 'index.html'));
-});
-//app.use('/users', users);
+app.use('/', routes);
+app.use('/users', users);
 //app.use('/awesomeChat',awesome);
 
-//app.get('/', function(req, res) {
-  //res.sendFile(path.join(__dirname, '', 'index.html'));
-//});
+app.get('/awesomeChat', function(req, res) {
+  res.sendFile(path.join(__dirname, '', 'index.html'));
+});
 
 
 io.sockets.on('connection',function(socket){
