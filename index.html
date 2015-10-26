@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Awesome Chat using node.js and socket.io
+		</title>
+		<style type="text/css">
+			#chat
+			{
+				height:500px;
+				overflow: scroll;
+			}
+            #contentWrap
+            {
+            	float: left;
+            	border:1px #000 solid;
+            }
+            #chatWrap
+            {
+            	display: none;
+            }
+            #users{
+            	padding-left: 20px;
+            }
+
+		</style>
+	</head>
+	<body>
+         
+         <div id="nickWrap">
+             <div id="nameWrap">
+	             <form id="nickForm">	
+	         	 	<input size="50" id="nick"></input>
+	         	 	<input type="submit" value="submit"></input>
+	         	 </form>
+         	</div>
+         	<div id="chatError"></div>
+         </div>
+
+ 
+		<div id ="chatWrap">
+			<div id="contentWrap">
+				<div id="chat"></div>
+				<form id="chatMessage">
+		            <input id="message" size="35"></input>
+		            <input type="submit" value="submit"></input>
+				</form>
+			</div>
+			<div>
+				<div id="users"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script type="text/javascript" src="socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+           jQuery(function($){
+			 var socket = io.connect();
+             var $chat = $('#chat');
+             var $messageForm = $('#chatMessage');
+             var $msg = $('#message');
+             var $nickForm = $("#nickForm");
+             var $nick = $("#nick");
+
+             $nickForm.submit(function(e){
+            	e.preventDefault();            	
+                socket.emit('new user',$nick.val(),function(data){
+                	if(data){
+                          $("#nickWrap").hide();
+                          $("#chatWrap").show();  
+                	}
+                	else
+                	{                		
+                		$("#chatError").html("That name is taken! Please try again.");
+                	}
+                });
+            	$nick.val('');
+             });           
+
+
+
+             $messageForm.submit(function(e){
+            	e.preventDefault();            	
+                socket.emit('send message',$msg.val());
+            	$msg.val('');
+             });
+
+
+             socket.on('new message', function(data){
+             	$chat.append("<b>" + data.nickName + "</b>:" + data.msg + "<br />");
+             });
+
+             socket.on('username', function(data){
+             	var html ='';
+             	for(i=0;i<data.length;i++){
+             		html = html + data[i] + "<br />";             		
+             	}
+             	$("#users").html(html);
+             });
+           });
+		</script>
+	</body>
+</html>
