@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/', routes);
-app.use('/users', users);
+//app.use('/users', users);
 //app.use('/awesomeChat',awesome);
 
 app.get('/', function(req, res) {
