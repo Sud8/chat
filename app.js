@@ -14,7 +14,7 @@ var server = require('http').createServer(app),
 io = require('socket.io').listen(server);
 
 var userNames = [];
-server.listen(3001);
+server.listen(80);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
