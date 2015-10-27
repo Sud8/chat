@@ -68,8 +68,8 @@ io.sockets.on('connection',function(socket){
 
   socket.on("disconnect",function(e)
     {
-        if(!userNames.indexOf(socket.nickname))
-        {
+        if(userNames.indexOf(socket.nickname) == -1)
+        {          
           return;
         }
         else
@@ -77,7 +77,7 @@ io.sockets.on('connection',function(socket){
             userNames.splice(userNames.indexOf(socket.nickname),1);
             updateUserNames();
         }
-
+       
     });
 
  
